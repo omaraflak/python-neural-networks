@@ -3,9 +3,9 @@ import numpy as np
 from keras.datasets import mnist
 from keras.utils import np_utils
 
-from layer import FCLayer, SoftmaxLayer, ActivationLayer
-from activation import tanh, tanh_prime
-from loss import mse, mse_prime
+from layers import FCLayer, SoftmaxLayer, ActivationLayer
+from activations import tanh, tanh_prime
+from losses import mse, mse_prime
 
 def load_data(n):
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
