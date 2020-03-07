@@ -7,12 +7,6 @@ from net.layers import FCLayer, SoftmaxLayer, ActivationLayer
 from net.activations import tanh, tanh_prime
 from net.losses import mse, mse_prime
 
-def predict(net, input):
-    output = input
-    for layer in net:
-        output = layer.forward(output)
-    return output
-
 X = [[0, 0], [0, 1], [1, 0], [1, 1]]
 Y = [[0], [1], [1], [0]]
 
@@ -53,4 +47,8 @@ for epoch in range(epochs):
     error /= len(X)
     print('%d/%d, error=%f' % (epoch + 1, epochs, error))
 
-print(predict(network, X))
+# test
+output = X
+for layer in network:
+    output = layer.forward(output)
+print(output)
