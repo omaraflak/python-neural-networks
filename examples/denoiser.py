@@ -10,6 +10,7 @@ from keras.utils import np_utils
 from net.layers import FCLayer, SoftmaxLayer, ActivationLayer
 from net.activations import tanh, tanh_prime
 from net.losses import mse, mse_prime
+from net.utils import forward, backward
 
 def load_data(n):
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -58,17 +59,13 @@ for epoch in range(epochs):
     error = 0
     for x_noise, x in zip(x_train_noise, x_train):
         # forward
-        output = x_noise
-        for layer in network:
-            output = layer.forward(output)
+        output = forward(network, x_noise)
 
         # error (display purpose only)
         error += mse(x, output)
 
         # backward
-        output_error = mse_prime(x, output)
-        for layer in reversed(network):
-            output_error = layer.backward(output_error)
+        backward(network, mse_prime(x, output))
 
         # update parameters
         for layer in network:

@@ -6,6 +6,7 @@ import numpy as np
 from net.layers import FCLayer, SoftmaxLayer, ActivationLayer
 from net.activations import tanh, tanh_prime
 from net.losses import mse, mse_prime
+from net.utils import forward, backward
 
 X = [[0, 0], [0, 1], [1, 0], [1, 1]]
 Y = [[0], [1], [1], [0]]
@@ -26,19 +27,15 @@ learning_rate = 0.1
 # training
 for epoch in range(epochs):
     error = 0
-    for x, y_true in zip(X, Y):
+    for x, y in zip(X, Y):
         # forward
-        output = x
-        for layer in network:
-            output = layer.forward(output)
+        output = forward(network, x)
 
         # error (display purpose only)
-        error += mse(y_true, output)
+        error += mse(y, output)
 
         # backward
-        output_error = mse_prime(y_true, output)
-        for layer in reversed(network):
-            output_error = layer.backward(output_error)
+        backward(network, mse_prime(y, output))
 
         # update parameters
         for layer in network:
@@ -48,7 +45,4 @@ for epoch in range(epochs):
     print('%d/%d, error=%f' % (epoch + 1, epochs, error))
 
 # test
-output = X
-for layer in network:
-    output = layer.forward(output)
-print(output)
+print(forward(network, X))
