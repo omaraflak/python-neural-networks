@@ -39,10 +39,10 @@ def backward(model, output):
             optimizer.set_weights(grad)
     return error
 
-def update(model):
+def update(model, iteration):
     for layer, optimizer in model:
         if layer.trainable:
-            layer.update(optimizer.get_weights())
+            layer.update(optimizer.get_weights(iteration))
 
 def train(model, loss, loss_prime, x_train, y_train, epochs, batch=1):
     train_set_size = len(x_train)
@@ -53,7 +53,7 @@ def train(model, loss, loss_prime, x_train, y_train, epochs, batch=1):
             error += loss(y, output)
             backward(model, loss_prime(y, output))
             if i % batch == 0:
-                update(model)
+                update(model, epoch + 1)
         error /= train_set_size
         print('%d/%d, error=%f' % (epoch + 1, epochs, error))
 

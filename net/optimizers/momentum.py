@@ -8,5 +8,5 @@ class Momentum(OptimizerBase):
         self.mu = mu
         self.v = np.zeros(self.shape)
 
-    def update(self, weights):
+    def update(self, iteration, weights):
         return self.mu * self.v - self.learning_rate * weights

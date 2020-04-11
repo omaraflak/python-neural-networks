@@ -5,5 +5,5 @@ class SGD(OptimizerBase):
         super().__init__()
         self.learning_rate = learning_rate
 
-    def update(self, weights):
+    def update(self, iteration, weights):
         return -self.learning_rate * weights

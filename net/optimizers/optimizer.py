@@ -10,12 +10,12 @@ class OptimizerBase:
             self.shape = np.shape(weights)
         self.weights.append(weights)
 
-    def get_weights(self):
-        updated_weights = self.update(np.sum(self.weights, axis=0))
+    def get_weights(self, iteration):
+        updated_weights = self.update(iteration, np.sum(self.weights, axis=0))
         self.weights = []
         return updated_weights
 
-    def update(self, weights):
+    def update(self, iteration, weights):
         pass
 
 class Optimizer:
@@ -31,5 +31,5 @@ class Optimizer:
         for optimizer, w in zip(self.optimizers, weights):
             optimizer.set_weights(w)
 
-    def get_weights(self):
-        return [opt.get_weights() for opt in self.optimizers]
+    def get_weights(self, iteration):
+        return [opt.get_weights(iteration) for opt in self.optimizers]

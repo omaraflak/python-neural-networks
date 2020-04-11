@@ -9,6 +9,6 @@ class RMSprop(OptimizerBase):
         self.eps = eps
         self.cache = np.zeros(self.shape)
 
-    def update(self, weights):
+    def update(self, iteration, weights):
         self.cache = self.decay_rate * self.cache + (1 - self.decay_rate) * np.power(weights, 2)
         return -self.learning_rate * weights / (np.sqrt(self.cache) + self.eps)

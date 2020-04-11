@@ -11,7 +11,9 @@ class Adam(OptimizerBase):
         self.m = np.zeros(self.shape)
         self.v = np.zeros(self.shape)
 
-    def update(self, weights):
+    def update(self, iteration, weights):
         self.m = self.beta_1 * self.m + (1 - self.beta_1) * weights
         self.v = self.beta_2 * self.v + (1 - self.beta_2) * np.power(weights, 2)
-        return -self.learning_rate * self.m / (np.sqrt(self.v) + self.eps)
+        m_hat = self.m / (1 - np.power(self.beta_1, iteration))
+        v_hat = self.v / (1 - np.power(self.beta_2, iteration))
+        return -self.learning_rate * m_hat / (np.sqrt(v_hat) + self.eps)
