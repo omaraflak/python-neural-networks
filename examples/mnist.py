@@ -6,10 +6,11 @@ import numpy as np
 from keras.datasets import mnist
 from keras.utils import np_utils
 
-from net.layers import FCLayer, SoftmaxLayer, ActivationLayer
-from net.activations import tanh, tanh_prime
+from net.layers import Dense, Activation
+from net.activations import Softmax, tanh, tanh_prime
 from net.losses import mse, mse_prime
-from net.utils import forward, backward
+from net.utils import create_model, forward, backward, update
+from net.optimizers import SGD
 
 def load_data(n):
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -26,23 +27,16 @@ def load_data(n):
 
     return x_train[:n], y_train[:n], x_test, y_test
 
-def predict(net, input):
-    output = input
-    for layer in net:
-        output = layer.forward(output)
-    return output
-
-network = [
-    FCLayer(28 * 28, 50),
-    ActivationLayer(tanh, tanh_prime),
-    FCLayer(50, 20),
-    ActivationLayer(tanh, tanh_prime),
-    FCLayer(20, 10),
-    SoftmaxLayer(10)
-]
+model = create_model([
+    Dense(28 * 28, 50),
+    Activation(tanh, tanh_prime),
+    Dense(50, 20),
+    Activation(tanh, tanh_prime),
+    Dense(20, 10),
+    Softmax(10)
+], SGD, {'learning_rate': 0.1})
 
 epochs = 30
-learning_rate = 0.1
 x_train, y_train, x_test, y_test = load_data(1000)
 
 # training
@@ -50,22 +44,21 @@ for epoch in range(epochs):
     error = 0
     for x, y_true in zip(x_train, y_train):
         # forward
-        output = forward(network, x)
+        output = forward(model, x)
 
         # error (display purpose only)
         error += mse(y_true, output)
 
         # backward
-        backward(network, mse_prime(y_true, output))
+        backward(model, mse_prime(y_true, output))
 
         # update parameters
-        for layer in network:
-            layer.update(learning_rate)
+        update(model)
 
     error /= len(x_train)
     print('%d/%d, error=%f' % (epoch + 1, epochs, error))
 
-ratio = sum([np.argmax(y) == np.argmax(predict(network, x)) for x, y in zip(x_test, y_test)]) / len(x_test)
-error = sum([mse(y, predict(network, x)) for x, y in zip(x_test, y_test)]) / len(x_test)
-print('ratio: %.2f' % ratio)
-print('mse: %.4f' % error)
+ratio = sum([np.argmax(y) == np.argmax(forward(model, x)) for x, y in zip(x_test, y_test)]) / len(x_test)
+error = sum([mse(y, forward(model, x)) for x, y in zip(x_test, y_test)]) / len(x_test)
+print('test set TP: %.2f' % ratio)
+print('test set MSE: %.4f' % error)

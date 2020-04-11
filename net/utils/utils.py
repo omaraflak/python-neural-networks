@@ -16,31 +16,30 @@ def create_model(network, OptimizerBaseClass, kwargs):
                 layer.output_shape = layer.input_shape
 
     # create one optimizer per layer
-    return network, [
-        Optimizer(OptimizerBaseClass, kwargs) if layer.trainable else None
+    return [
+        (layer, Optimizer(OptimizerBaseClass, kwargs) if layer.trainable else None)
         for layer in network
     ]
 
 def summary(model):
-    for layer in model[0]:
+    for layer, _ in model:
         print(layer.input_shape, '\t', layer.output_shape)
 
 def forward(model, input):
     output = input
-    for layer in model[0]:
+    for layer, _ in model:
         output = layer.forward(output)
     return output
 
 def backward(model, output):
-    network, optimizers = model
     error = output
-    for layer, optimizer in zip(reversed(network), reversed(optimizers)):
+    for layer, optimizer in reversed(model):
         error, grad = layer.backward(error)
         if layer.trainable:
             optimizer.set_weights(grad)
     return error
 
 def update(model):
-    for layer, optimizer in zip(*model):
+    for layer, optimizer in model:
         if layer.trainable:
             layer.update(optimizer.get_weights())
