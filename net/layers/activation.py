@@ -1,5 +1,8 @@
-class ActivationLayer:
+from net.layers.layer import Layer
+
+class Activation(Layer):
     def __init__(self, activation, activation_prime):
+        super().__init__(trainable=False)
         self.activation = activation
         self.activation_prime = activation_prime
 
@@ -8,7 +11,4 @@ class ActivationLayer:
         return self.activation(input)
 
     def backward(self, output_error):
-        return output_error * self.activation_prime(self.input)
-
-    def update(self, learning_rate):
-        pass
+        return output_error * self.activation_prime(self.input), None
