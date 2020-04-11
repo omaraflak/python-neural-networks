@@ -9,8 +9,8 @@ from keras.utils import np_utils
 from net.layers import Dense, Activation
 from net.activations import Softmax, tanh, tanh_prime
 from net.losses import mse, mse_prime
-from net.utils import create_model, forward, backward, update
 from net.optimizers import SGD
+from net.utils import create_model, train, test, forward
 
 def load_data(n):
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -36,29 +36,6 @@ model = create_model([
     Softmax(10)
 ], SGD, {'learning_rate': 0.1})
 
-epochs = 30
 x_train, y_train, x_test, y_test = load_data(1000)
-
-# training
-for epoch in range(epochs):
-    error = 0
-    for x, y_true in zip(x_train, y_train):
-        # forward
-        output = forward(model, x)
-
-        # error (display purpose only)
-        error += mse(y_true, output)
-
-        # backward
-        backward(model, mse_prime(y_true, output))
-
-        # update parameters
-        update(model)
-
-    error /= len(x_train)
-    print('%d/%d, error=%f' % (epoch + 1, epochs, error))
-
-ratio = sum([np.argmax(y) == np.argmax(forward(model, x)) for x, y in zip(x_test, y_test)]) / len(x_test)
-error = sum([mse(y, forward(model, x)) for x, y in zip(x_test, y_test)]) / len(x_test)
-print('test set TP: %.2f' % ratio)
-print('test set MSE: %.4f' % error)
+train(model, mse, mse_prime, x_train, y_train, epochs=30)
+print('error on test set:', test(model, mse, x_test, y_test))

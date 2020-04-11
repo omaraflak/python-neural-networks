@@ -9,8 +9,8 @@ from keras.datasets import mnist
 from net.layers import Dense, Activation
 from net.activations import tanh, tanh_prime
 from net.losses import mse, mse_prime
-from net.utils import create_model, forward, backward, update
-from net.optimizers import SGD, Adam
+from net.optimizers import SGD
+from net.utils import create_model, train, test, forward
 
 def load_data(n):
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -35,30 +35,9 @@ model = create_model([
     Dense(30, 28 * 28)
 ], SGD, {'learning_rate': 0.1})
 
-epochs = 50
 x_train, x_test = load_data(1000)
-
-# training
-for epoch in range(epochs):
-    error = 0
-    for x in x_train:
-        # forward
-        output = forward(model, x)
-
-        # error (display purpose only)
-        error += mse(x, output)
-
-        # backward
-        backward(model, mse_prime(x, output))
-
-        # update parameters
-        update(model)
-
-    error /= len(x_train)
-    print('%d/%d, error=%f' % (epoch + 1, epochs, error))
-
-error = sum([mse(x, forward(model, x)) for x in x_test]) / len(x_test)
-print('test set MSE: %.4f' % error)
+train(model, mse, mse_prime, x_train, x_train, epochs=50)
+print('error on test set:', test(model, mse, x_test, x_test))
 
 encoder = model[:4]
 decoder = model[4:]
