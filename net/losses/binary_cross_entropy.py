@@ -9,12 +9,12 @@ class BinaryCrossEntropy(Loss):
 
     def call(self, y_true, y_pred):
         if self.from_logits:
-            return -np.log(self.s.call(y_pred)) if y_true == 1 else -np.log(1 - self.s.call(y_pred))
+            return y_true * -np.log(self.s.call(y_pred)) + (1 - y_true) * -np.log(1 - self.s.call(y_pred))
         else:
-            return -np.log(y_pred) if y_true == 1 else -np.log(1 - y_pred)
+            return y_true * -np.log(y_pred) + (1 - y_true) * -np.log(1 - y_pred)
 
     def prime(self, y_true, y_pred):
         if self.from_logits:
-            return -self.s.prime(y_pred) / self.s.call(y_pred) if y_true == 1 else self.s.prime(y_pred) / (1 - self.s.call(y_pred))
+            return y_true * -self.s.prime(y_pred) / self.s.call(y_pred) + (1 - y_true) * self.s.prime(y_pred) / (1 - self.s.call(y_pred))
         else:
-            return -1 / y_pred if y_true == 1 else 1 / (1 - y_pred)
+            return y_true * -1 / y_pred + (1 - y_true) / (1 - y_pred)
