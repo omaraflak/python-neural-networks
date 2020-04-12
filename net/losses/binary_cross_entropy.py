@@ -12,7 +12,7 @@ class BinaryCrossEntropy(Loss):
     def __init__(self, from_logits=False):
         self.from_logits = from_logits
 
-    def call(self, y_pred, y_true):
+    def call(self, y_true, y_pred):
         if self.from_logits:
             return -np.log(sigmoid(y_pred)) if y_true == 1 else -np.log(1 - sigmoid(y_pred))
         else:
