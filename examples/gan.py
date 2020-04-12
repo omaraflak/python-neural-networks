@@ -35,7 +35,7 @@ G = create_model([
     LeakyReLU(0.2),
     Dense(128, 28 * 28),
     Sigmoid()
-], Adam, {'learning_rate': -0.002, 'beta_1': 0.5})
+], Adam, {'learning_rate': 0.0002, 'beta_1': 0.5})
 
 # discriminator
 D = create_model([
@@ -43,17 +43,17 @@ D = create_model([
     LeakyReLU(0.2),
     Dense(128, 1),
     Sigmoid()
-], Adam, {'learning_rate': -0.002, 'beta_1': 0.5})
+], Adam, {'learning_rate': 0.0002, 'beta_1': 0.5})
 
 # params
 cross_entropy = BinaryCrossEntropy()
 epochs = 100
-batch_size = 8
+batch_size = 16
 
 # intermediate generation to create GIF
 gen_count = 10
 seeds = np.random.randn(gen_count, noise_size)
-print_fq = 10
+print_fq = 2
 
 # training
 G_errors = []
@@ -69,16 +69,16 @@ for epoch in range(epochs):
 
         # discriminate real image + backward
         real_predict = forward(D, real_image)
-        backward(D, -1 * cross_entropy.prime(1, real_predict))
+        backward(D, cross_entropy.prime(1, real_predict))
 
         # discriminate fake image + backward
         fake_predict = forward(D, fake_image)
-        dEDdDG = -1 * cross_entropy.prime(0, fake_predict)
+        dEDdDG = cross_entropy.prime(0, fake_predict)
         dEDdG = backward(D, dEDdDG)
 
         # backward generator
         dDGdG = dEDdG / dEDdDG
-        backward(G, dDGdG / fake_predict)
+        backward(G, -dDGdG / fake_predict)
 
         G_error += cross_entropy.call(1, fake_predict)
         D_error += cross_entropy.call(1, real_predict) + cross_entropy.call(0, fake_predict)
@@ -101,5 +101,5 @@ for epoch in range(epochs):
             image = np.reshape(gen, (28, 28))
             plt.subplot(1, gen_count, i + 1)
             plt.imshow(image, cmap='binary')
-        plt.savefig('epoch_%d.png' % (epoch + 1))
+        plt.savefig('images/epoch_%d.png' % (epoch + 1))
         plt.close()
