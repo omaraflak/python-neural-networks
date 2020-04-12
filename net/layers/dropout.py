@@ -2,13 +2,13 @@ import numpy as np
 from net.layers.layer import Layer
 
 class Dropout(Layer):
-    def __init__(self, p=0.3):
+    def __init__(self, p=0.1):
         super().__init__(trainable=False)
         self.p = p
         self.mask = None
 
     def forward(self, input):
-        self.mask = np.random.rand(*self.input_shape) < p
+        self.mask = np.random.rand(*self.input_shape) < self.p
         output = np.copy(input)
         output[self.mask] = 0
         return output
