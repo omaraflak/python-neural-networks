@@ -78,7 +78,8 @@ for epoch in range(epochs):
 
         # backward generator
         dDGdG = dEDdG / dEDdDG
-        backward(G, -dDGdG / fake_predict)
+        dEGdDG = cross_entropy.prime(1, fake_predict)
+        backward(G, dDGdG * dEGdDG)
 
         G_error += cross_entropy.call(1, fake_predict)
         D_error += cross_entropy.call(1, real_predict) + cross_entropy.call(0, fake_predict)
