@@ -1,7 +1,9 @@
 import numpy as np
+from net.losses.loss import Loss
 
-def mse(y_true, y_pred):
-    return np.mean(np.power(y_true - y_pred, 2))
+class MSE(Loss):
+    def call(self, y_pred, y_true):
+        return np.mean(np.power(y_true - y_pred, 2))
 
-def mse_prime(y_true, y_pred):
-    return 2 * (y_pred - y_true) / y_pred.size
+    def prime(self, y_true, y_pred):
+        return 2 * (y_pred - y_true) / y_pred.size

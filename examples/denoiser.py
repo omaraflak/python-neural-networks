@@ -8,7 +8,7 @@ from keras.datasets import mnist
 
 from net.layers import Dense, Activation
 from net.activations import tanh, tanh_prime
-from net.losses import mse, mse_prime
+from net.losses import MSE
 from net.optimizers import SGD
 from net.utils import create_model, train, test, forward
 
@@ -41,9 +41,10 @@ model = create_model([
     Activation(tanh, tanh_prime),
     Dense(30, 28 * 28)
 ], SGD, {'learning_rate': 0.1})
+mse = MSE()
 
 (x_train, x_train_noise), (x_test, x_test_noise) = load_data(1000)
-train(model, mse, mse_prime, x_train_noise, x_train, epochs=50)
+train(model, mse, x_train_noise, x_train, epochs=50)
 print('error on test set:', test(model, mse, x_test_noise, x_test))
 
 encoder = model[:4]

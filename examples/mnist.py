@@ -8,7 +8,7 @@ from keras.utils import np_utils
 
 from net.layers import Dense, Activation
 from net.activations import Softmax, tanh, tanh_prime
-from net.losses import mse, mse_prime
+from net.losses import MSE
 from net.optimizers import SGD
 from net.utils import create_model, train, test, forward
 
@@ -35,7 +35,8 @@ model = create_model([
     Dense(20, 10),
     Softmax(10)
 ], SGD, {'learning_rate': 0.1})
+mse = MSE()
 
 x_train, y_train, x_test, y_test = load_data(1000)
-train(model, mse, mse_prime, x_train, y_train, epochs=30)
+train(model, mse, x_train, y_train, epochs=30)
 print('error on test set:', test(model, mse, x_test, y_test))

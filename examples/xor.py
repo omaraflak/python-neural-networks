@@ -5,7 +5,7 @@ import numpy as np
 
 from net.layers import Dense, Activation
 from net.activations import tanh, tanh_prime
-from net.losses import mse, mse_prime
+from net.losses import MSE
 from net.optimizers import SGD
 from net.utils import create_model, train, test
 
@@ -18,6 +18,7 @@ model = create_model([
     Dense(3, 1),
     Activation(tanh, tanh_prime)
 ], SGD, {'learning_rate': 0.1})
+mse = MSE()
 
-train(model, mse, mse_prime, X, Y, epochs=1000)
+train(model, mse, X, Y, epochs=1000)
 print('error on test set:', test(model, mse, X, Y))

@@ -1,3 +1,4 @@
-from .mse import mse, mse_prime
-from .sse import sse, sse_prime
-from .cross_entropy import cross_entropy, cross_entropy_prime
+from .loss import Loss
+from .mse import MSE
+from .sse import SSE
+from .binary_cross_entropy import BinaryCrossEntropy

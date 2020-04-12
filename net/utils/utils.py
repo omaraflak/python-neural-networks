@@ -44,14 +44,14 @@ def update(model, iteration):
         if layer.trainable:
             layer.update(optimizer.get_weights(iteration))
 
-def train(model, loss, loss_prime, x_train, y_train, epochs, batch=1):
+def train(model, loss, x_train, y_train, epochs, batch=1):
     train_set_size = len(x_train)
     for epoch in range(epochs):
         error = 0
         for i, (x, y) in enumerate(zip(x_train, y_train)):
             output = forward(model, x)
-            error += loss(y, output)
-            backward(model, loss_prime(y, output))
+            error += loss.call(y, output)
+            backward(model, loss.prime(y, output))
             if i % batch == 0:
                 update(model, epoch + 1)
         error /= train_set_size
@@ -61,6 +61,6 @@ def test(model, loss, x_test, y_test):
     error = 0
     for x, y in zip(x_test, y_test):
         output = forward(model, x)
-        error += loss(y, output)
+        error += loss.call(y, output)
     error /= len(x_test)
     return error
