@@ -1,6 +1,6 @@
 import numpy as np
 from net.losses.loss import Loss
-from net.losses.activations import Sigmoid
+from net.activations import Sigmoid
 
 class BinaryCrossEntropy(Loss):
     def __init__(self, from_logits=False):
