@@ -3,7 +3,7 @@ sys.path.append('..')
 
 import numpy as np
 
-from net.layers import Dense, Activation
+from net.layers import Dense
 from net.activations import Tanh
 from net.losses import MSE
 from net.optimizers import SGD

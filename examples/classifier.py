@@ -2,11 +2,10 @@ import sys
 sys.path.append('..')
 
 import numpy as np
-
 from keras.datasets import mnist
 from keras.utils import np_utils
 
-from net.layers import Dense, Activation
+from net.layers import Dense
 from net.activations import Softmax, Tanh
 from net.losses import MSE
 from net.optimizers import SGD
