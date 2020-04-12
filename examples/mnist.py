@@ -7,7 +7,7 @@ from keras.datasets import mnist
 from keras.utils import np_utils
 
 from net.layers import Dense, Activation
-from net.activations import Softmax, tanh, tanh_prime
+from net.activations import Softmax, Tanh
 from net.losses import MSE
 from net.optimizers import SGD
 from net.utils import create_model, train, test, forward
@@ -29,9 +29,9 @@ def load_data(n):
 
 model = create_model([
     Dense(28 * 28, 50),
-    Activation(tanh, tanh_prime),
+    Tanh(),
     Dense(50, 20),
-    Activation(tanh, tanh_prime),
+    Tanh(),
     Dense(20, 10),
     Softmax(10)
 ], SGD, {'learning_rate': 0.1})

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from keras.datasets import mnist
 
 from net.layers import Dense, Activation
-from net.activations import tanh, tanh_prime
+from net.activations import Tanh
 from net.losses import MSE
 from net.optimizers import SGD
 from net.utils import create_model, train, test, forward
@@ -34,11 +34,11 @@ def load_data(n):
 
 model = create_model([
     Dense(28 * 28, 30),
-    Activation(tanh, tanh_prime),
+    Tanh(),
     Dense(30, 16),
-    Activation(tanh, tanh_prime),
+    Tanh(),
     Dense(16, 30),
-    Activation(tanh, tanh_prime),
+    Tanh(),
     Dense(30, 28 * 28)
 ], SGD, {'learning_rate': 0.1})
 mse = MSE()

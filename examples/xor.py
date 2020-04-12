@@ -4,7 +4,7 @@ sys.path.append('..')
 import numpy as np
 
 from net.layers import Dense, Activation
-from net.activations import tanh, tanh_prime
+from net.activations import Tanh
 from net.losses import MSE
 from net.optimizers import SGD
 from net.utils import create_model, train, test
@@ -14,9 +14,9 @@ Y = np.reshape([[0], [1], [1], [0]], (4, 1, 1))
 
 model = create_model([
     Dense(2, 3),
-    Activation(tanh, tanh_prime),
+    Tanh(),
     Dense(3, 1),
-    Activation(tanh, tanh_prime)
+    Tanh()
 ], SGD, {'learning_rate': 0.1})
 mse = MSE()
 
