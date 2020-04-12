@@ -1,6 +1,6 @@
 # My Neural Networks
 
-This is a machine learning 'library' I made from scratch, for educational purpose only.
+This is a machine learning __'library'__ I made from scratch, for educational purpose only.
 
 # Example
 
@@ -9,7 +9,7 @@ import numpy as np
 
 from net.layers import Dense, Activation
 from net.activations import tanh, tanh_prime
-from net.losses import mse, mse_prime
+from net.losses import MSE
 from net.optimizers import SGD
 from net.utils import create_model, train, test
 
@@ -23,6 +23,7 @@ model = create_model([
     Activation(tanh, tanh_prime)
 ], SGD, {'learning_rate': 0.1})
 
-train(model, mse, mse_prime, X, Y, epochs=1000)
+mse = MSE()
+train(model, mse, X, Y, epochs=1000)
 print('error on test set:', test(model, mse, X, Y))
 ```
