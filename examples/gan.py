@@ -46,7 +46,7 @@ D = create_model([
 ], Adam, {'learning_rate': 0.0002, 'beta_1': 0.5})
 
 # params
-cross_entropy = BinaryCrossEntropy()
+loss = BinaryCrossEntropy(from_logits=True)
 epochs = 100
 batch_size = 16
 
@@ -69,20 +69,20 @@ for epoch in range(epochs):
 
         # discriminate real image + backward
         real_predict = forward(D, real_image)
-        backward(D, cross_entropy.prime(1, real_predict))
+        backward(D, loss.prime(1, real_predict))
 
         # discriminate fake image + backward
         fake_predict = forward(D, fake_image)
-        dEDdDG = cross_entropy.prime(0, fake_predict)
+        dEDdDG = loss.prime(0, fake_predict)
         dEDdG = backward(D, dEDdDG)
 
         # backward generator
         dDGdG = dEDdG / dEDdDG
-        dEGdDG = cross_entropy.prime(1, fake_predict)
+        dEGdDG = loss.prime(1, fake_predict)
         backward(G, dDGdG * dEGdDG)
 
-        G_error += cross_entropy.call(1, fake_predict)
-        D_error += cross_entropy.call(1, real_predict) + cross_entropy.call(0, fake_predict)
+        G_error += loss.call(1, fake_predict)
+        D_error += loss.call(1, real_predict) + loss.call(0, fake_predict)
 
         # update every batch_size times
         if index % batch_size == 0:
