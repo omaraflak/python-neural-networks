@@ -15,40 +15,40 @@ from net.utils import create_model, forward, backward, update
 x_train = x_train.astype('float32')
 x_train = x_train / 255
 x_train = np.reshape([
-    x_train[y_train == 0][:100],
-    x_train[y_train == 1][:100],
-    x_train[y_train == 2][:100],
-    x_train[y_train == 3][:100],
-    x_train[y_train == 4][:100],
-    x_train[y_train == 5][:100],
-    x_train[y_train == 6][:100],
-    x_train[y_train == 7][:100],
-    x_train[y_train == 8][:100],
-    x_train[y_train == 9][:100]
-], (100 * 10, 28, 28))
+    x_train[y_train == 0][:500],
+    x_train[y_train == 1][:500],
+    x_train[y_train == 2][:500],
+    x_train[y_train == 3][:500],
+    x_train[y_train == 4][:500],
+    x_train[y_train == 5][:500],
+    x_train[y_train == 6][:500],
+    x_train[y_train == 7][:500],
+    x_train[y_train == 8][:500],
+    x_train[y_train == 9][:500]
+], (500 * 10, 28, 28))
 np.random.shuffle(x_train)
 
 # generator model
 noise_size = 100
 G = create_model([
-    Dense(noise_size, 128),
+    Dense(noise_size, 200),
     LeakyReLU(0.2),
-    Dense(128, 28 * 28),
+    Dense(200, 28 * 28),
     Sigmoid()
-], Adam, {'learning_rate': 0.0002, 'beta_1': 0.5})
+], Adam, {'learning_rate': 0.0001, 'beta_1': 0.5})
 
 # discriminator
 D = create_model([
-    Dense(28 * 28, 128),
+    Dense(28 * 28, 200),
     LeakyReLU(0.2),
-    Dense(128, 1),
+    Dense(200, 1),
     Sigmoid()
-], Adam, {'learning_rate': 0.0002, 'beta_1': 0.5})
+], Adam, {'learning_rate': 0.0001, 'beta_1': 0.5})
 
 # params
-loss = BinaryCrossEntropy(from_logits=True)
-epochs = 100
-batch_size = 16
+loss = BinaryCrossEntropy()
+epochs = 50
+batch_size = 8
 
 # intermediate generation to create GIF
 gen_count = 10
@@ -69,7 +69,8 @@ for epoch in range(epochs):
 
         # discriminate real image + backward
         real_predict = forward(D, real_image)
-        backward(D, loss.prime(1, real_predict))
+        soft_real = np.random.uniform(0.9, 1)
+        backward(D, loss.prime(soft_real, real_predict))
 
         # discriminate fake image + backward
         fake_predict = forward(D, fake_image)
@@ -82,7 +83,7 @@ for epoch in range(epochs):
         backward(G, dDGdG * dEGdDG)
 
         G_error += loss.call(1, fake_predict)
-        D_error += loss.call(1, real_predict) + loss.call(0, fake_predict)
+        D_error += loss.call(soft_real, real_predict) + loss.call(0, fake_predict)
 
         # update every batch_size times
         if index % batch_size == 0:
