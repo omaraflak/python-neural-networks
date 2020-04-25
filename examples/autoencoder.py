@@ -9,6 +9,7 @@ from net.layers import Dense
 from net.activations import Tanh
 from net.losses import MSE
 from net.optimizers import SGD
+from net.initializers import Xavier
 from net.utils import create_model, train, test, forward
 
 def load_data(n):
@@ -32,7 +33,7 @@ model = create_model([
     Dense(16, 30),
     Tanh(),
     Dense(30, 28 * 28)
-], SGD, {'learning_rate': 0.1})
+], Xavier(), SGD, {'learning_rate': 0.1})
 mse = MSE()
 
 x_train, x_test = load_data(1000)

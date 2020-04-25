@@ -4,8 +4,11 @@ from net.layers.layer import Layer
 class Dense(Layer):
     def __init__(self, input_size, output_size):
         super().__init__((1, input_size), (1, output_size))
-        self.weights = np.random.randn(input_size, output_size) / np.sqrt(input_size + output_size)
-        self.bias = np.random.randn(1, output_size) / np.sqrt(input_size + output_size)
+
+    def initialize(self, initializer):
+        input_size, output_size = self.input_shape[1], self.output_shape[1]
+        self.weights = initializer.get(input_size, output_size)
+        self.bias = initializer.get(1, output_size)
 
     def forward(self, input):
         self.input = input

@@ -11,6 +11,7 @@ from net.layers import Dense, Activation
 from net.activations import tanh, tanh_prime
 from net.losses import MSE
 from net.optimizers import SGD
+from net.initializers import Xavier
 from net.utils import create_model, train, test
 
 X = np.reshape([[0, 0], [0, 1], [1, 0], [1, 1]], (4, 1, 2))
@@ -21,7 +22,7 @@ model = create_model([
     Activation(tanh, tanh_prime),
     Dense(3, 1),
     Activation(tanh, tanh_prime)
-], SGD, {'learning_rate': 0.1})
+], Xavier(), SGD, {'learning_rate': 0.1})
 
 mse = MSE()
 train(model, mse, X, Y, epochs=1000)
