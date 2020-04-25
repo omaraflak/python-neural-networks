@@ -6,6 +6,9 @@ class Layer:
         self.input = None
         self.output = None
 
+    def initialize(self, initializer):
+        pass
+
     def forward(self, input):
         pass
 

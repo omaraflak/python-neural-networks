@@ -1,6 +1,6 @@
 from net.optimizers import Optimizer
 
-def create_model(network, OptimizerBaseClass, kwargs):
+def create_model(network, OptimizerClass, optimizerArgs, InitializerClass, initializerArgs=None):
     # set input_shape & output_shape
     n = len(network)
     for i, layer in enumerate(network):
@@ -9,15 +9,16 @@ def create_model(network, OptimizerBaseClass, kwargs):
             layer.output_shape = layer.input_shape
         elif not layer.input_shape:
             layer.input_shape = network[i - 1].output_shape
-        elif not layer.output_shape:
-            if i < n - 1:
-                layer.output_shape = network[i + 1].input_shape
-            else:
-                layer.output_shape = layer.input_shape
+
+    # initialize network
+    layer_sizes = [(layer.input_shape, layer.output_shape) for layer in network]
+    initializer = InitializerClass(layer_sizes, **initializerArgs)
+    for layer in network:
+        layer.initialize(initializer)
 
     # create one optimizer per layer
     return [
-        (layer, Optimizer(OptimizerBaseClass, kwargs) if layer.trainable else None)
+        (layer, Optimizer(OptimizerClass, optimizerArgs) if layer.trainable else None)
         for layer in network
     ]
 
