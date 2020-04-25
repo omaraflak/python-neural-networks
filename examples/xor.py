@@ -14,11 +14,9 @@ X = np.reshape([[0, 0], [0, 1], [1, 0], [1, 1]], (4, 1, 2))
 Y = np.reshape([[0], [1], [1], [0]], (4, 1, 1))
 
 model = create_model([
-    Dense(2, 3),
-    Tanh(),
-    Dense(3, 1),
-    Tanh()
-], SGD, {'learning_rate': 0.1}, Xavier)
+    Dense(2, 3), Tanh(),
+    Dense(3, 1), Tanh()
+], Xavier(), SGD, {'learning_rate': 0.1})
 mse = MSE()
 
 train(model, mse, X, Y, epochs=1000)

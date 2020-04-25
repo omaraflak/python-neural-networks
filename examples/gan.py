@@ -2,12 +2,14 @@ import sys
 sys.path.append('..')
 
 import numpy as np
+import matplotlib.pyplot as plt
 from keras.datasets import mnist
 
 from net.layers import Dense
 from net.activations import LeakyReLU, Sigmoid
 from net.losses import BinaryCrossEntropy
-from net.optimizers import SGD
+from net.optimizers import Adam
+from net.initializers import He
 from net.utils import create_model, forward, backward, update
 
 # load mnist dataset
@@ -35,7 +37,7 @@ G = create_model([
     LeakyReLU(0.2),
     Dense(200, 28 * 28),
     Sigmoid()
-], Adam, {'learning_rate': 0.0001, 'beta_1': 0.5})
+], He(), Adam, {'learning_rate': 0.0001, 'beta_1': 0.5})
 
 # discriminator
 D = create_model([
@@ -43,7 +45,7 @@ D = create_model([
     LeakyReLU(0.2),
     Dense(200, 1),
     Sigmoid()
-], Adam, {'learning_rate': 0.0001, 'beta_1': 0.5})
+], He(), Adam, {'learning_rate': 0.0001, 'beta_1': 0.5})
 
 # params
 loss = BinaryCrossEntropy()
