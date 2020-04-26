@@ -8,5 +8,5 @@ def relu_prime(x):
     return np.array(x > 0).astype('int')
 
 class ReLU(Activation):
-    def __init__(self):
-        super().__init__(relu, relu_prime)
+    def __init__(self, **kwargs):
+        super().__init__(relu, relu_prime, **kwargs)

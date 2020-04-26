@@ -2,8 +2,8 @@ import numpy as np
 from net.layers.layer import Layer
 
 class Softmax(Layer):
-    def __init__(self):
-        super().__init__(trainable=False)
+    def __init__(self, **kwargs):
+        super().__init__(trainable=False, **kwargs)
 
     def forward(self, input):
         self.input = input

@@ -9,5 +9,5 @@ def sigmoid_prime(x):
     return s * (1 - s)
 
 class Sigmoid(Activation):
-    def __init__(self):
-        super().__init__(sigmoid, sigmoid_prime)
+    def __init__(self, **kwargs):
+        super().__init__(sigmoid, sigmoid_prime, **kwargs)
