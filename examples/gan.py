@@ -33,17 +33,17 @@ np.random.shuffle(x_train)
 # generator model
 noise_size = 100
 G = create_model([
-    Dense(noise_size, 200),
+    Dense(200, input_shape=(1, noise_size)),
     LeakyReLU(0.2),
-    Dense(200, 28 * 28),
+    Dense(784),
     Sigmoid()
 ], He(), Adam, {'learning_rate': 0.0001, 'beta_1': 0.5})
 
 # discriminator
 D = create_model([
-    Dense(28 * 28, 200),
+    Dense(200, input_shape=(1, 784)),
     LeakyReLU(0.2),
-    Dense(200, 1),
+    Dense(1),
     Sigmoid()
 ], He(), Adam, {'learning_rate': 0.0001, 'beta_1': 0.5})
 
