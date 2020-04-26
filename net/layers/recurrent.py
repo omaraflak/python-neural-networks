@@ -2,13 +2,16 @@ import numpy as np
 from net.layers.layer import Layer
 
 class Recurrent(Layer):
-    def __init__(self, input_size, output_size):
-        super().__init__((1, input_size), (1, output_size))
-        self.weights = np.random.randn(input_size, output_size) / np.sqrt(input_size + output_size)
-        self.weights2 = np.random.randn(1, output_size) / np.sqrt(input_size + output_size)
-        self.bias = np.random.randn(1, output_size) / np.sqrt(input_size + output_size)
+    def __init__(self, output_size, **kwargs):
+        super().__init__(output_shape=(1, output_size), **kwargs)
         self.output = np.zeros((1, output_size))
         self.last_output = None
+
+    def initialize(self, initializer):
+        input_size, output_size = self.input_shape[1], self.output_shape[1]
+        self.weights = initializer.get(input_size, output_size)
+        self.weights2 = initializer.get(1, output_size)
+        self.bias = initializer.get(1, output_size)
 
     def forward(self, input):
         self.input = input

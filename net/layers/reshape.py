@@ -2,10 +2,8 @@ import numpy as np
 from net.layers.layer import Layer
 
 class Reshape(Layer):
-    def __init__(self, input_shape, output_shape=None):
-        if not output_shape:
-            output_shape = (1, np.prod(input_shape))
-        super().__init__(input_shape, output_shape, trainable=False)
+    def __init__(self, output_shape, **kwargs):
+        super().__init__(output_shape=output_shape, trainable=False, **kwargs)
 
     def forward(self, input):
         return np.reshape(input, self.output_shape)

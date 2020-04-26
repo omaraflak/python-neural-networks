@@ -2,8 +2,8 @@ import numpy as np
 from net.layers.layer import Layer
 
 class Dropout(Layer):
-    def __init__(self, p=0.1):
-        super().__init__(trainable=False)
+    def __init__(self, p=0.1, **kwargs):
+        super().__init__(trainable=False, **kwargs)
         self.p = p
         self.mask = None
 

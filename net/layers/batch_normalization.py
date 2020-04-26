@@ -2,11 +2,13 @@ import numpy as np
 from net.layers.layer import Layer
 
 class BatchNormalization(Layer):
-    def __init__(self, epsilon=0.001):
-        super().__init__()
+    def __init__(self, epsilon=0.001, **kwargs):
+        super().__init__(**kwargs)
         self.epsilon = epsilon
-        self.gamma = np.random.randn()
-        self.beta = np.random.randn()
+
+    def initialize(self, initializer):
+        self.gamma = initializer.get()
+        self.beta = initializer.get()
 
     def forward(self, input):
         self.input = input

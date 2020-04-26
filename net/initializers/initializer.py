@@ -12,5 +12,8 @@ class Initializer:
     def get_io(self):
         return self.layer_sizes[self.index]
 
+    def get(self):
+        return self.get(1)[0]
+
     def get(self, *shape):
         pass

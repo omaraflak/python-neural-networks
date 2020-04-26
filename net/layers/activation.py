@@ -1,8 +1,8 @@
 from net.layers.layer import Layer
 
 class Activation(Layer):
-    def __init__(self, activation, activation_prime):
-        super().__init__(trainable=False)
+    def __init__(self, activation, activation_prime, **kwargs):
+        super().__init__(trainable=False, **kwargs)
         self.activation = activation
         self.activation_prime = activation_prime
 
