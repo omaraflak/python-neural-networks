@@ -10,10 +10,10 @@ class Layer:
         pass
 
     def forward(self, input):
-        pass
+        raise NotImplementedError
 
     def backward(self, output_error):
-        pass
+        raise NotImplementedError
 
     def update(self, updates):
         pass

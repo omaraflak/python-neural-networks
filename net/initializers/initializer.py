@@ -16,4 +16,4 @@ class Initializer:
         return self.get(1)[0]
 
     def get(self, *shape):
-        pass
+        raise NotImplementedError

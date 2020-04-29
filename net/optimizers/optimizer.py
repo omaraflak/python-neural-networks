@@ -16,7 +16,7 @@ class OptimizerBase:
         return updated_weights
 
     def update(self, iteration, weights):
-        pass
+        raise NotImplementedError
 
 class Optimizer:
     def __init__(self, OptClass, kwargs):
