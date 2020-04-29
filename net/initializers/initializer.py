@@ -9,7 +9,7 @@ class Initializer:
     def set_layer_index(self, index):
         self.index = index
 
-    def get_io(self):
+    def get_io_shape(self):
         return self.layer_sizes[self.index]
 
     def get(self):
