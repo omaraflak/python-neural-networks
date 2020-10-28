@@ -7,7 +7,9 @@ class Layer:
         self.output = None
 
     def initialize(self, initializer):
-        pass
+        if self.trainable:
+            raise NotImplementedError
+        return None
 
     def forward(self, input):
         raise NotImplementedError
@@ -16,4 +18,5 @@ class Layer:
         raise NotImplementedError
 
     def update(self, updates):
-        pass
+        if self.trainable:
+            raise NotImplementedError
