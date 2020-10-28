@@ -11,10 +11,10 @@ def create_model(network, initializer, OptimizerClass, optimizerArgs={}):
             layer.input_shape = network[i - 1].output_shape
 
     # initialize layers
-    layer_sizes = [(layer.input_shape, layer.output_shape) for layer in network]
-    initializer.set_layer_sizes(layer_sizes)
-    for index, layer in enumerate(network):
-        initializer.set_layer_index(index)
+    layer_shapes = [(layer.input_shape, layer.output_shape) for layer in network]
+    initializer.set_layer_shapes(layer_shapes)
+    for i, layer in enumerate(network):
+        initializer.set_layer_index(i)
         layer.initialize(initializer)
 
     # create one optimizer per layer
