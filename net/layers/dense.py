@@ -15,10 +15,10 @@ class Dense(Layer):
         self.input = input
         return np.dot(input, self.weights) + self.bias
 
-    def backward(self, output_error):
-        return np.dot(output_error, self.weights.T), [
-            np.dot(self.input.T, output_error),
-            output_error
+    def backward(self, output_gradient):
+        return np.dot(output_gradient, self.weights.T), [
+            np.dot(self.input.T, output_gradient),
+            output_gradient
         ]
 
     def update(self, updates):

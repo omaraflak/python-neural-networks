@@ -13,7 +13,7 @@ class Dropout(Layer):
         output[self.mask] = 0
         return output
 
-    def backward(self, output_error):
-        input_error = np.ones(self.input_shape)
-        input_error[self.mask] = 0
-        return input_error, None
+    def backward(self, output_gradient):
+        input_gradient = np.ones(self.input_shape)
+        input_gradient[self.mask] = 0
+        return input_gradient, None

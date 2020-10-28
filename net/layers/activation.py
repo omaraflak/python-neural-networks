@@ -10,5 +10,5 @@ class Activation(Layer):
         self.input = input
         return self.activation(input)
 
-    def backward(self, output_error):
-        return output_error * self.activation_prime(self.input), None
+    def backward(self, output_gradient):
+        return output_gradient * self.activation_prime(self.input), None

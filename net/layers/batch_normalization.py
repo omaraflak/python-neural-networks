@@ -18,14 +18,14 @@ class BatchNormalization(Layer):
         self.x_hat = (input - self.mu) / np.sqrt(self.sigma2 + self.epsilon)
         return self.gamma * self.x_hat + self.beta
 
-    def backward(self, output_error):
+    def backward(self, output_gradient):
         N = self.input.size
-        dx_hat = output_error * self.gamma
+        dx_hat = output_gradient * self.gamma
         tmp = N * np.sqrt(self.sigma2 + self.epsilon)
-        dinput = (N * dx_hat - np.sum(dx_hat, axis=0) - self.x_hat * np.sum(dx_hat * self.x_hat, axis=0)) / tmp
-        return dinput, [
-            np.sum(output_error * self.x_hat, axis=0),
-            np.sum(output_error, axis=0)
+        input_gradient = (N * dx_hat - np.sum(dx_hat, axis=0) - self.x_hat * np.sum(dx_hat * self.x_hat, axis=0)) / tmp
+        return input_gradient, [
+            np.sum(output_gradient * self.x_hat, axis=0),
+            np.sum(output_gradient, axis=0)
         ]
 
     def update(self, updates):
