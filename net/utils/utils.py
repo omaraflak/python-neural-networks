@@ -47,16 +47,16 @@ def update(model, iteration):
 
 def train(model, loss, x_train, y_train, epochs, batch=1):
     train_set_size = len(x_train)
-    for epoch in range(epochs):
+    for epoch in range(1, epochs + 1):
         error = 0
-        for i, (x, y) in enumerate(zip(x_train, y_train)):
+        for x, y in zip(x_train, y_train):
             output = forward(model, x)
             error += loss.call(y, output)
             backward(model, loss.prime(y, output))
-            if i % batch == 0:
-                update(model, epoch + 1)
+            if epoch % batch == 0:
+                update(model, epoch)
         error /= train_set_size
-        print('%d/%d, error=%f' % (epoch + 1, epochs, error))
+        print('%d/%d, error=%f' % (epoch, epochs, error))
 
 def test(model, loss, x_test, y_test):
     error = 0
