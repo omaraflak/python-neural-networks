@@ -9,6 +9,7 @@ class Dense(Layer):
         input_size, output_size = self.input_shape[1], self.output_shape[1]
         self.weights = initializer.get(input_size, output_size)
         self.bias = initializer.get(1, output_size)
+        return [(input_size, output_size), (1, output_size)]
 
     def forward(self, input):
         self.input = input

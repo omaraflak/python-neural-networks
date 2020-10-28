@@ -1,6 +1,6 @@
 from net.optimizers import Optimizer
 
-def create_model(network, initializer, OptimizerClass, optimizerArgs={}):
+def create_model(network, initializer, OptimizerBaseClass, optimizerArgs={}):
     # set input_shape & output_shape
     n = len(network)
     for i, layer in enumerate(network):
@@ -10,18 +10,17 @@ def create_model(network, initializer, OptimizerClass, optimizerArgs={}):
         elif not layer.input_shape:
             layer.input_shape = network[i - 1].output_shape
 
-    # initialize layers
+    # initialize layers & create one optimizer per layer
     layer_shapes = [(layer.input_shape, layer.output_shape) for layer in network]
     initializer.set_layer_shapes(layer_shapes)
+    optimizers = []
     for i, layer in enumerate(network):
         initializer.set_layer_index(i)
-        layer.initialize(initializer)
+        param_shapes = layer.initialize(initializer)
+        optimizers.append(Optimizer(OptimizerBaseClass, optimizerArgs, param_shapes) if layer.trainable else None)
 
-    # create one optimizer per layer
-    return [
-        (layer, Optimizer(OptimizerClass, optimizerArgs) if layer.trainable else None)
-        for layer in network
-    ]
+    # return list of (layer, optimizer)
+    return list(zip(network, optimizers))
 
 def summary(model):
     for layer, _ in model:

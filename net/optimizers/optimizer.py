@@ -1,13 +1,11 @@
 import numpy as np
 
 class OptimizerBase:
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.weights = []
-        self.shape = None
+        self.shape = kwargs['shape']
 
     def set_weights(self, weights):
-        if not self.shape:
-            self.shape = np.shape(weights)
         self.weights.append(weights)
 
     def get_weights(self, iteration):
@@ -19,15 +17,13 @@ class OptimizerBase:
         raise NotImplementedError
 
 class Optimizer:
-    def __init__(self, OptClass, kwargs):
-        self.OptClass = OptClass
-        self.kwargs = kwargs
-        self.optimizers = None
+    def __init__(self, OptimizerBaseClass, optimizerArgs, param_shapes):
+        self.optimizers = [
+            OptimizerBaseClass(**{**optimizerArgs, 'shape': shape})
+            for shape in param_shapes
+        ]
 
     def set_weights(self, weights):
-        if not self.optimizers:
-            self.optimizers = [self.OptClass(**self.kwargs) for w in weights]
-
         for optimizer, w in zip(self.optimizers, weights):
             optimizer.set_weights(w)
 

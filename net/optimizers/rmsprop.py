@@ -2,8 +2,8 @@ import numpy as np
 from .optimizer import OptimizerBase
 
 class RMSprop(OptimizerBase):
-    def __init__(self, learning_rate=0.01, decay_rate=0.9, eps=1e-8):
-        super().__init__()
+    def __init__(self, learning_rate=0.01, decay_rate=0.9, eps=1e-8, **kwargs):
+        super().__init__(**kwargs)
         self.learning_rate = learning_rate
         self.decay_rate = decay_rate
         self.eps = eps

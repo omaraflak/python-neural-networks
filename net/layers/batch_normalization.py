@@ -9,6 +9,7 @@ class BatchNormalization(Layer):
     def initialize(self, initializer):
         self.gamma = initializer.get()
         self.beta = initializer.get()
+        return [(1), (1)]
 
     def forward(self, input):
         self.input = input

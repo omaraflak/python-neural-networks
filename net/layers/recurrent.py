@@ -12,6 +12,7 @@ class Recurrent(Layer):
         self.weights = initializer.get(input_size, output_size)
         self.weights2 = initializer.get(1, output_size)
         self.bias = initializer.get(1, output_size)
+        return [(input_size, output_size), (1, output_size), (1, output_size)]
 
     def forward(self, input):
         self.input = input
