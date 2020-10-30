@@ -4,11 +4,11 @@ def create_model(network, initializer, OptimizerBaseClass, optimizerArgs={}):
     # set input_shape & output_shape
     n = len(network)
     for i, layer in enumerate(network):
-        if not layer.input_shape and not layer.output_shape:
+        if not layer.input_shape:
             layer.input_shape = network[i - 1].output_shape
+        layer.on_input_shape()
+        if not layer.output_shape:
             layer.output_shape = layer.input_shape
-        elif not layer.input_shape:
-            layer.input_shape = network[i - 1].output_shape
 
     # initialize layers & create one optimizer per layer
     layer_shapes = [(layer.input_shape, layer.output_shape) for layer in network]

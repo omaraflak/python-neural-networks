@@ -6,10 +6,12 @@ class Layer:
         self.input = None
         self.output = None
 
+    def on_input_shape(self):
+        pass
+
     def initialize(self, initializer):
         if self.trainable:
             raise NotImplementedError
-        return None
 
     def forward(self, input):
         raise NotImplementedError
