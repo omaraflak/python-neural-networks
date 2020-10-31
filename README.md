@@ -1,6 +1,6 @@
-# My Neural Networks
+# Python Neural Networks
 
-This is a machine learning __'library'__ I made from scratch, for educational purpose only.
+This is a machine learning library I made from scratch, for educational purpose.
 
 # Example
 
