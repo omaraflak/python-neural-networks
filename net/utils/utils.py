@@ -2,7 +2,6 @@ from net.optimizers import Optimizer
 
 def create_model(network, initializer, OptimizerBaseClass, optimizerArgs={}):
     # set input_shape & output_shape
-    n = len(network)
     for i, layer in enumerate(network):
         if not layer.input_shape:
             layer.input_shape = network[i - 1].output_shape
