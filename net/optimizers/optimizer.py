@@ -2,18 +2,18 @@ import numpy as np
 
 class OptimizerBase:
     def __init__(self, **kwargs):
-        self.weights = []
+        self.gradients = []
         self.shape = kwargs['shape']
 
-    def set_weights(self, weights):
-        self.weights.append(weights)
+    def set_gradients(self, gradients):
+        self.gradients.append(gradients)
 
-    def get_weights(self, iteration):
-        updated_weights = self.update(iteration, np.sum(self.weights, axis=0))
-        self.weights = []
-        return updated_weights
+    def get_gradients(self, iteration):
+        updated_gradients = self.update(iteration, np.sum(self.gradients, axis=0))
+        self.gradients = []
+        return updated_gradients
 
-    def update(self, iteration, weights):
+    def update(self, iteration, gradients):
         raise NotImplementedError
 
 class Optimizer:
@@ -23,9 +23,9 @@ class Optimizer:
             for shape in param_shapes
         ]
 
-    def set_weights(self, weights):
-        for optimizer, w in zip(self.optimizers, weights):
-            optimizer.set_weights(w)
+    def set_gradients(self, gradients):
+        for optimizer, grad in zip(self.optimizers, gradients):
+            optimizer.set_gradients(grad)
 
-    def get_weights(self, iteration):
-        return [opt.get_weights(iteration) for opt in self.optimizers]
+    def get_gradients(self, iteration):
+        return [opt.get_gradients(iteration) for opt in self.optimizers]

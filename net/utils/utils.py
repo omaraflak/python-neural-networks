@@ -34,15 +34,15 @@ def forward(model, input):
 def backward(model, output):
     error = output
     for layer, optimizer in reversed(model):
-        error, grad = layer.backward(error)
+        error, gradients = layer.backward(error)
         if layer.trainable:
-            optimizer.set_weights(grad)
+            optimizer.set_gradients(gradients)
     return error
 
 def update(model, iteration):
     for layer, optimizer in model:
         if layer.trainable:
-            layer.update(optimizer.get_weights(iteration))
+            layer.update(optimizer.get_gradients(iteration))
 
 def train(model, loss, x_train, y_train, epochs, batch=1):
     train_set_size = len(x_train)
