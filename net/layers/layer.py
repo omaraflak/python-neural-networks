@@ -10,8 +10,7 @@ class Layer:
         pass
 
     def initialize(self, initializer):
-        if self.trainable:
-            raise NotImplementedError
+        pass
 
     def forward(self, input):
         raise NotImplementedError
